@@ -1,0 +1,40 @@
+
+.OkelloNoPadding div input{
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.top_appbar  .FirstBar {
+   min-height: 40px;
+   height: 40px;
+}
+.FirstBar div{
+    /* min-height: 15px;     */
+}
+
+.container {
+    display: flex;
+    overflow-x: auto;
+    padding: 16px;
+    animation: scrollAnimation 10s linear infinite; /* Adjust the duration as needed */
+}
+@keyframes scrollAnimation {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  
+  
+.card {
+    flex: 0 0 auto;
+    width: 200px;
+    height: 100px;
+    background-color: #f0f0f0;
+    margin-right: 16px;
+}
+
+
+
