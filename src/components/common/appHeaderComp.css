@@ -1,0 +1,86 @@
+.top_appbar {
+  width: 100%;
+  background-color: #F0E9E9;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  color: #5B5B5B;
+  
+
+  .top_appbar_toolbar {
+      margin-left: auto;
+      min-height: 40px;
+  /* margin-top: 8px; */
+      margin-right: auto;
+      width: 84%;
+      
+      /* background-color: red; */
+
+  }
+}
+
+.lower_appbar {
+  background-color: #FFD700;
+  width: 100%;
+  padding-bottom: 6px;
+  display: flex;
+  /* justify-content: center; */
+  color: black;
+  align-items: center;
+
+  .lower_appbar_toolbar {
+      margin-left: auto;
+  /* margin-top: 8px; */
+      margin-right: auto;
+      width: 84%;
+      justify-content: space-between;
+      /* background-color: red; */
+
+  }
+  .search-field {
+    display: flex;
+    align-items: center;
+    /* padding-left: 8px; */
+    
+    padding-left: 0px;
+
+    /* width: 600px; */
+    border-radius: 6px;
+    background-color: #C4C4C4;
+  }
+  
+  .logo-search {
+    display: flex;
+    align-items: center;
+    
+  }
+}
+
+.product-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Add margin or padding as needed */
+  margin: 10px; /* Adjust spacing between product cards */
+}
+
+.nav-item {
+  margin-right: 16px; /* Adjust spacing between navigation items */
+  padding-left: 24px;
+  /* padding-right: 20px; */
+}
+
+
+.logo {
+  margin-right: 16px; /* Adjust spacing between logo and search field */
+}
+
+/* .lower_appbar .logo-search  */
+.cart-profile {
+  display: flex;
+  align-items: center;
+}
+
+.cart-profile > * {
+  margin-left: 8px; /* Adjust spacing between cart/profile icons */
+}
