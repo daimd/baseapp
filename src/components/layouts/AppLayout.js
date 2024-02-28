@@ -6,7 +6,7 @@ import { AuthProvider } from '../../context/AuthContext';
 
 const AppLayout = ({ children }) => {
     return (
-        <>  
+        <AuthProvider>  
             {/* Check authentication status (e.g., check if user is logged in) 
                 Render common layout components such as header, footer, etc.
             */}
@@ -19,7 +19,7 @@ const AppLayout = ({ children }) => {
 
             {children} {/* Render child components */}
             
-        </>
+        </AuthProvider>
     );
 };
 

@@ -20,6 +20,7 @@ const App = () => {
     <Router>
             <AuthProvider>
                 <Routes>
+                    
                     {appRoutes.map((route, index) => (
                         <Route key={index} path={route.path} element={route.element}>
                             {route.children && route.children.map((childRoute, childIndex) => (
