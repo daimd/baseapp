@@ -9,14 +9,11 @@ import AppLayout from '../components/layouts/AppLayout';
 import ProductPage from '..//pages/Product/ProductPage';
 
 const appRoutes = [
-  // { path: '/login', element: <LoginPage /> },
   {
     path: '/',
-    // element: <LoginPage />,
     element: <AppLayout />,
     children: [
       { path: '/login', element: <LoginPage /> },
-      // { path: '/login', element: <AppLayout /> },
       {
         path: '/',
         element: <ProtectedRoute />,
@@ -30,7 +27,7 @@ const appRoutes = [
   },
   
 ];
-
+console.log('appRoutes=============>:', appRoutes); // Log the appRoutes configuration
 export default appRoutes;
 
 

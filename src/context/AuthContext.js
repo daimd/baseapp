@@ -1,3 +1,5 @@
+// The AuthContext /Provider
+
 import React, { createContext, useEffect, useState } from 'react';
 import authService from '../apis/authService'; // Import the authService for handling authentication
 import { decodeToken, validateToken } from '../utils/tokenUtils'; // Import token utilities for decoding and validating tokens
@@ -6,6 +8,7 @@ import   configureAxiosInstance  from '../utils/axiosInstance'; // Import the co
 
 // Create the AuthContext to share authentication state and functions with other components
 export const AuthContext = createContext();
+
 // Make sure to call configureAxiosInstance before making any axios requests
 configureAxiosInstance();
 // AuthProvider component responsible for managing authentication state and providing authentication-related functions
@@ -35,6 +38,7 @@ export const AuthProvider = ({ children }) => {
       const { token: authToken, user: userData } = await authService.login(credentials);
       // Store the token in localStorage
       localStorage.setItem('token', authToken);
+      localStorage.setItem('user', userData);
       // Decode and set user and roles using the received token
       decodeTokenAndSetUserAndRoles(authToken);
     } catch (error) {
@@ -54,21 +58,21 @@ export const AuthProvider = ({ children }) => {
         // Decode the token payload
         const decodedPayload = decodeToken(storedToken);
         // Extract user and roles from decoded token
-        const user = decodedPayload.user;
+        const user = decodedPayload.username;
         const userRoles = decodedPayload.role || [];
         // Set user, roles, and token
         setUser(user);
         setRoles(userRoles);
         setToken(storedToken);
 
-        console.log(" The roles roles and user ", user ,"with ", userRoles ,"roles");
+        console.log(" The roles roles and user ", user ,"with ", userRoles ,"roles", storedToken,"token");
          
         // Ensure configureAxiosInstance is defined before setting headers
-        if (typeof configureAxiosInstance !== 'undefined' && configureAxiosInstance !== null) {
-          configureAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-        } else {
-          console.error('configureAxiosInstance is not properly initialized.');
-        }
+        // if (typeof configureAxiosInstance !== 'undefined' && configureAxiosInstance !== null) {
+        //   configureAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+        // } else {
+        //   console.error('configureAxiosInstance is not properly initialized.');
+        // }
       } 
       else {
           // Handle invalid token
@@ -112,6 +116,7 @@ export const AuthProvider = ({ children }) => {
       ) : (
         <div>Loading...</div> // Render loading state while checking authentication status
       )}
+      {/* {children} */}
     </AuthContext.Provider>
   );
 };

@@ -4,6 +4,8 @@ import { Route, Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const ProtectedRoute = ({ component: Component, roles, ...rest }) => {
+    console.log('Rendering ProtectedRoute for path:', rest.path); // Log the path of the ProtectedRoute
+
     const { isAuthenticatedUser } = useContext(AuthContext);
 
     if(!isAuthenticatedUser){

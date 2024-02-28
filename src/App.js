@@ -14,13 +14,13 @@ const App = () => {
     useEffect(() => {
         Modal.setAppElement('#root');
       }, []); // Ensure that it runs only once on component mount
-    
+      console.log('appRoutes from api.js:', appRoutes); // Log the appRoutes configuration
+
   return (
     
     <Router>
             <AuthProvider>
                 <Routes>
-                    
                     {appRoutes.map((route, index) => (
                         <Route key={index} path={route.path} element={route.element}>
                             {route.children && route.children.map((childRoute, childIndex) => (

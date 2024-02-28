@@ -1,59 +1,54 @@
 // LoginModal.js
 
-import React, { useState } from "react";
+// Fix the user Info once successfully
+// Then add the <Prodts>
+// Also add the toasts for login failure or successfully 
+
+import React, { useState, useContext } from "react";
 // import Modal from "react-modal";
-import authService from "../../apis/authService";
+import { useNavigate } from 'react-router-dom';
+// import authService from "../../apis/authService";
 import {Modal, Container, CssBaseline, Grid, Paper, Typography, Box, TextField, Button, ButtonBase } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AuthContext } from "../../context/AuthContext";
+
 
 const LoginModal = ({ isOpen, closeModal  }) => {
+    const navigate = useNavigate(); 
+
+     
+    const { login } = useContext(AuthContext);
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+
     const handleLogin = async () => {
         
         try {
-            // setIsSubmitting(true); // Set form submission status to true
-            // while (loginAttempts < maxLoginAttempts) {
-            const { token, user } = await authService.login({ username, password });
-            // // Set the token and perform other actions upon successful login
-            // // Set the token in configureAxiosInstance headers of subsequent authenticated requests
-            // if (configureAxiosInstance) {
-            //     configureAxiosInstance.defaults.headers.common[
-            //     "Authorization"
-            //     ] = `Bearer ${token}`;
-            // } else {
-            //     console.error("configureAxiosInstance is not defined");
-            // }
-
+            // const { token, user } = await authService.login({ username, password });
+            const { token, user } = await login({ username, password });
+        
             // Optionally, you can store the token in localStorage for persistent authentication
             localStorage.setItem("token", token);
-            // loginAttempts = loginAttempts + 1;
+            localStorage.setItem("user", JSON.stringify(user)); // Convert user object to string before saving
 
-            
-            // setIsSubmitting(false); // Reset form submission status
+            // Redirect user to desired page (e.g., "/product") after successful login
+            navigate('product'); 
+
             closeModal(); // Close the modal after successful login
             
             return; // Exit the function after successful login
-        // }
-        // If the loop exits without returning, it means maxLoginAttempts is reached
-        // setError("Maximum login attempts reached. Please try again later.");
         } catch (error) {
             console.error("Login failed:", error);
             // setError("Login failed: " + error.message);
             if (error.response && error.response.status === 401) {
                 closeModal(); // Close the modal after successful login
-                
-            // setIsSubmitting(false); // Reset form submission status
-            // Handle login error (e.g., display error message to the user)
-                // setError("Invalid username or password");
+
             } else {
                 setError("Login failed: " + error);
-                // setIsSubmitting(false); // Reset form submission status
             }
             
-            // setIsSubmitting(false); // Reset form submission status
         }
     };
 

@@ -15,9 +15,9 @@ const AppLayout = ({ children }) => {
             
             <AppHeader />
 
-            <LoginButton />
+            {/* <LoginButton /> */}
 
-            {children} {/* Render child components */}
+            {/* {children} Render child components */}
             
         </>
     );

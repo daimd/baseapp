@@ -14,17 +14,17 @@ const authService = {
         console.log(" The credentials : ",credentials);
       // Make an HTTP request to your login endpoint
       const response = await axiosInstance.post(loginApi, credentials)
+      // Extract and store the access token adn user data in authContext from the response
+      console.log("The response data:", response.data); 
+
+      // const { token } = response.data;
+      const token = response.data.token;
+      if (!token) {
+        console.error("No token received from backend!! ");
+        throw new Error('Token not found in response');
+      }
       
-      // .then((data)=>{
-
-      // })
-      // .catch((error)=>{
-
-      // })
-      console.log(" The response ***************: ",response);
-      // Extract the access token from the response
-      const { token } = response.data;
-      console.log(" The token1 : ",token);
+      console.log(" The token received at login : ",token);
       // Check if the access token is expired
       if (isTokenExpired(token)) {
         throw new Error('Access token is expired');
@@ -36,7 +36,7 @@ const authService = {
       return { token, user }; // Return token and user data
     } catch (error) {
       console.log("******************",error);
-      throw new Error('Sorry Login failed: ');
+      throw new Error('Sorry we are failing to log you in probable cause: ');
     }
   },
 
