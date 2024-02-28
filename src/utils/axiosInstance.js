@@ -47,23 +47,12 @@ const configureAxiosInstance = (accessToken, refreshToken) => {
       return response;
     },
     async (error) => {
-      const originalRequest = error.config;
-
-      if (error.response && error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        localStorage.clear();
-        try {
-          // Attempt to refresh token
-          const newRefreshToken = await authService.refreshAccessToken();
-          // Update authorization header with new token
-          originalRequest.headers.Authorization = `Bearer ${newRefreshToken}`;
-          // Retry the original request
-          return instance(originalRequest);
-        } catch (refreshError) {
-          console.error('Error refreshing access token:', refreshError);
-          // Handle refresh error
-          throw new Error('Failed to refresh token. Please login again.');
-        }
+      // Redirect the users to the login Model
+      if (error.response.status === 401) {
+          localStorage.clear()
+          console.log('redirect login=======')
+          if(window.location.pathname=== '/login' ) return
+          window.location.pathname = '/login'
       }
       return Promise.reject(error);
     }

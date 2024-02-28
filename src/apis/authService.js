@@ -13,12 +13,15 @@ const authService = {
     try {
         console.log(" The credentials : ",credentials);
       // Make an HTTP request to your login endpoint
-      const response = await axiosInstance.post(loginApi, credentials);
-      // const response = await axiosInstance.post('http://localhost:5000/auth/login',{
-      //   username : credentials.username,
-      //   password: credentials.password
-      // });
-      console.log(" The response : ",response);
+      const response = await axiosInstance.post(loginApi, credentials)
+      
+      // .then((data)=>{
+
+      // })
+      // .catch((error)=>{
+
+      // })
+      console.log(" The response ***************: ",response);
       // Extract the access token from the response
       const { token } = response.data;
       console.log(" The token1 : ",token);
@@ -32,7 +35,8 @@ const authService = {
 
       return { token, user }; // Return token and user data
     } catch (error) {
-      throw new Error('Sorry Login failed: ' + error.message);
+      console.log("******************",error);
+      throw new Error('Sorry Login failed: ');
     }
   },
 
@@ -47,7 +51,7 @@ const authService = {
 
       return accessToken; // Return the new access token
     } catch (error) {
-      throw new Error('Token refresh failed: ' + error.message);
+      throw new Error('Token refresh failed: ' + error);
     }
   },
 

@@ -12,6 +12,7 @@ const appRoutes = [
   // { path: '/login', element: <LoginPage /> },
   {
     path: '/',
+    // element: <LoginPage />,
     element: <AppLayout />,
     children: [
       { path: '/login', element: <LoginPage /> },

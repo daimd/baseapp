@@ -41,7 +41,7 @@ const AppHeader = () => {
         setSearchValue(event.target.value);
       };
    return (
-    <AppBar style={{ position: "relative", boxShadow: "none" }}>
+    <AppBar style={{ position: "relative", boxShadow: "none", backgroundColor: "white"}}>
   <div className="top_appbar" >
     <Toolbar className="top_appbar_toolbar" >
       <Grid container alignItems="center">
@@ -57,7 +57,7 @@ const AppHeader = () => {
       </Grid>
     </Toolbar>
   </div>
-  <div className="lower_appbar" style={{backgroundColor: '#FFD700', width: '100%', paddingBottom: '6px', display: 'block', justifyContent: 'center', alignItems: 'center' }}>
+  <div className="lower_appbar" style={{backgroundColor: '#FFD700', width: '100%', marginBottom: '6px', display: 'block', justifyContent: 'center', alignItems: 'center' }}>
     <Toolbar className="lower_appbar_toolbar">
       <div className="logo-search">
         <Typography variant="h4" className="logo" fontWeight={'bold'} sx={{paddingRight: '8px', whiteSpace: 'nowrap' }}>

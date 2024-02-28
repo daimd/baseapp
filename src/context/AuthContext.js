@@ -103,19 +103,14 @@ export const AuthProvider = ({ children }) => {
   // Provide auth-related data and functions to child components through AuthContext
   return (
     <AuthContext.Provider value={{ user, roles, token, login: handleLogin, logout: handleLogout }}>
-        {!isLoading ? (
-        isAuthenticated() ? (
-          // If user is authenticated, render children
-          children
-        ) : (
-          // If user is not authenticated, redirect to login page
-          <Navigate to="/login" />
-        )
-      ) : (
-        // Render loading state while checking authentication status
-        <div>Loading...</div>
-      )}
-      {children}
+        {!isLoading ? 
+               (isAuthenticated() ? ( children ) : (<Navigate to="/login" />) // If user is authenticated, render children
+        )   // If user is not authenticated, redirect to login page
+        : (<div>Loading... 
+          {children}</div>    // Render loading state while checking authentication status 
+          )
+        
+        }
     </AuthContext.Provider>
   );
 };
