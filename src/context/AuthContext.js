@@ -4,13 +4,13 @@ import React, { createContext, useEffect, useState } from 'react';
 import authService from '../apis/authService'; // Import the authService for handling authentication
 import { decodeToken, validateToken } from '../utils/tokenUtils'; // Import token utilities for decoding and validating tokens
 import { Navigate } from 'react-router-dom'; 
-import   configureAxiosInstance  from '../utils/axiosInstance'; // Import the configureAxiosInstance function
+// import   configureAxiosInstance  from '../utils/axiosInstance'; // Import the configureAxiosInstance function
 
 // Create the AuthContext to share authentication state and functions with other components
 export const AuthContext = createContext();
 
 // Make sure to call configureAxiosInstance before making any axios requests
-configureAxiosInstance();
+// configureAxiosInstance();
 // AuthProvider component responsible for managing authentication state and providing authentication-related functions
 export const AuthProvider = ({ children }) => {
  
@@ -19,87 +19,85 @@ export const AuthProvider = ({ children }) => {
   const [roles, setRoles] = useState([]);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Effect hook to run once on component mount
-  useEffect(() => {
+  
+  // Effect hook to run once on component mount. This is to support scenarios where the user may have a valid token
+  //  stored in localStorage from a previous session and you want to automatically authenticate them based on that
+  //  token when they revisit your application
+useEffect(() => {
+  const checkStoredToken = async () => {
     // Check if a token is stored in localStorage
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
-      // Decode and set user and roles if token exists
-      decodeTokenAndSetUserAndRoles(storedToken);
+      try {
+        const { token, user, role } = await authService.validateToken(storedToken);
+        // Call setUserAndRolesFromLoginResponse with the received token, user, and role
+        setUserAndRolesFromLoginResponse(token, user, role);
+      } catch (error) {
+        // Handle token validation error or expired token
+        console.error('Error validating token:', error);
+        // Clear localStorage and reset authentication state
+        localStorage.removeItem('token');
+        setUser(null);
+        setRoles([]);
+        setToken(null);
+      }
     }
     setIsLoading(false);
-  }, []);
+  };
+
+  checkStoredToken();
+
+}, []);
+
 
   // Function to handle user login
   const handleLogin = async (credentials) => {
     try {
-      // Call the login function from authService to authenticate the user
-      const { token: authToken, user: userData } = await authService.login(credentials);
-      // Store the token in localStorage
-      localStorage.setItem('token', authToken);
-      localStorage.setItem('user', userData);
-      // Decode and set user and roles using the received token
-      decodeTokenAndSetUserAndRoles(authToken);
+      const { token, user, role } = await authService.login(credentials);
+      console.log(user);
+      console.log(role);
+      // Call setUserAndRolesFromLoginResponse with the received token, user, and role
+    setUserAndRolesFromLoginResponse(token, user, role);
+      return { token, user, role }; // Return token, user, and role
     } catch (error) {
       console.error('Error Logging in: ' + error);
       // TODO: Handle login error (e.g., display error message to user)
     }
   };
 
-  // Function to decode JWT token and set user and roles
-  const decodeTokenAndSetUserAndRoles = (storedToken) => {
-    try {
-      // Validate the stored token
-      if (validateToken(storedToken)) {
-        // Set token in axiosInstance headers for authenticated requests
-        // const axiosInstance = configureAxiosInstance();
-
-        // Decode the token payload
-        const decodedPayload = decodeToken(storedToken);
-        // Extract user and roles from decoded token
-        const user = decodedPayload.username;
-        const userRoles = decodedPayload.role || [];
+    // Function to set user and roles from login response data
+  const setUserAndRolesFromLoginResponse = (token, user, roles) => {
+      try {
         // Set user, roles, and token
         setUser(user);
-        setRoles(userRoles);
-        setToken(storedToken);
-
-        console.log(" The roles roles and user ", user ,"with ", userRoles ,"roles", storedToken,"token");
-         
-        // Ensure configureAxiosInstance is defined before setting headers
-        // if (typeof configureAxiosInstance !== 'undefined' && configureAxiosInstance !== null) {
-        //   configureAxiosInstance.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-        // } else {
-        //   console.error('configureAxiosInstance is not properly initialized.');
-        // }
-      } 
-      else {
-          // Handle invalid token
-          handleLogout();
-        }
-    } catch (error) {
-      console.error('Error Decoding token:', error);
-      // Handle token decoding error
-    }
+        setRoles(roles);
+        setToken(token);
+      } catch (error) {
+        console.error('Error setting user and roles:', error);
+        // Handle any error that occurs while setting user and roles
+      }
   };
 
   // Function to handle user logout
-  const handleLogout = () => {
+  const handleLogout = async () => {
      // Set token in axiosInstance headers for authenticated requests
-    // const axiosInstance = configureAxiosInstance();
-    // Remove token from localStorage
-    localStorage.removeItem('token');
-    if (configureAxiosInstance) {
-      delete configureAxiosInstance.defaults.headers.common['Authorization'];
-    }
-    // Clear user, roles, and token from state
-    setUser(null);
-    setRoles([]);
-    setToken(null);
+     try {
+      // const axiosInstance = configureAxiosInstance();
+      await authService.logout();
+      // if (configureAxiosInstance) {
+      //   delete configureAxiosInstance.defaults.headers.common['Authorization'];
+      // }
+      // Clear user, roles, and token from state
+      setUser(null);
+      setRoles([]);
+      setToken(null);
+  } catch (error) {
+    console.error('Logout failed:', error.message);
+  }
   };
 
   // Function to check if user is authenticated
+  // If token is falsy (e.g., null, undefined, false, 0, ""), then !token evaluates to true.
   const isAuthenticated = () => {
     return !!token;
   };
@@ -116,7 +114,6 @@ export const AuthProvider = ({ children }) => {
       ) : (
         <div>Loading...</div> // Render loading state while checking authentication status
       )}
-      {/* {children} */}
     </AuthContext.Provider>
   );
 };

@@ -7,7 +7,7 @@
 import React, { useState, useContext } from "react";
 // import Modal from "react-modal";
 import { useNavigate } from 'react-router-dom';
-// import authService from "../../apis/authService";
+import authService from "../../apis/authService";
 import {Modal, Container, CssBaseline, Grid, Paper, Typography, Box, TextField, Button, ButtonBase } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { AuthContext } from "../../context/AuthContext";
@@ -18,6 +18,7 @@ const LoginModal = ({ isOpen, closeModal  }) => {
 
      
     const { login } = useContext(AuthContext);
+    // console.log("Login___________________---->",login);
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -26,13 +27,17 @@ const LoginModal = ({ isOpen, closeModal  }) => {
     const handleLogin = async () => {
         
         try {
-            // const { token, user } = await authService.login({ username, password });
-            const { token, user } = await login({ username, password });
+            const { token, user, role } = await authService.login({ username, password });
+            // const { token, user } = await login({ username, password });
         
+            console.log(" token in model:+++++===", token);
             // Optionally, you can store the token in localStorage for persistent authentication
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(user)); // Convert user object to string before saving
+            localStorage.setItem("role", JSON.stringify(role)); // Convert user roles
 
+            // update the properties
+            handleLogin(token, user, role)
             // Redirect user to desired page (e.g., "/product") after successful login
             navigate('product'); 
 

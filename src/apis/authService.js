@@ -32,8 +32,9 @@ const authService = {
 
       // Optionally decode the token to extract user information
       const user = decodeToken(token);
+      const role = response.data.roles;
 
-      return { token, user }; // Return token and user data
+      return { token, user, role  }; // Return token and user data
     } catch (error) {
       console.log("******************",error);
       throw new Error('Sorry we are failing to log you in probable cause: ');
@@ -56,9 +57,23 @@ const authService = {
   },
 
   // Function to logout user
-  logout: () => {
-    // Implement logout logic here, such as clearing tokens from local storage
-    // You may also want to redirect the user to the login page or perform other cleanup tasks
+  logout: async() => {
+    try{
+    // Implement logout logic here, such as clearing tokens, users, roles from local storage
+    
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('role');
+
+      // You may also want to redirect the user to the home page or perform other cleanup tasks
+      navigator('/home')
+      // Optionally, make an API call to notify the server of the logout (e.g., revoke tokens)
+      // ToDO: await axios.post('/logout');
+
+      // Return a successful logout message or indication
+      return 'Logout successful';
+    } catch(error){
+    }
   },
 };
 
