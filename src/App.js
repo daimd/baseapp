@@ -10,11 +10,11 @@ import Modal from 'react-modal'; //When using react-modal, it requires you to se
 const App = () => {
     // To resolve this warning, you can set the appElement using the Modal.setAppElement method provided by react-modal. 
     // Typically, you would set it to a DOM element that represents the main content of your application.
-    Modal.setAppElement('#root'); // Set the app element to the root div
-    useEffect(() => {
-        Modal.setAppElement('#root');
-      }, []); // Ensure that it runs only once on component mount
-      console.log('appRoutes from api.js:', appRoutes); // Log the appRoutes configuration
+    // Modal.setAppElement('#root'); // Set the app element to the root div
+    // useEffect(() => {
+    //     Modal.setAppElement('#root');
+    //   }, []); // Ensure that it runs only once on component mount
+    //   console.log('appRoutes from api.js:', appRoutes); // Log the appRoutes configuration
 
   return (
     

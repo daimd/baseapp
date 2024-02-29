@@ -2,7 +2,7 @@
 
 import React, { createContext, useEffect, useState } from 'react';
 import authService from '../apis/authService'; // Import the authService for handling authentication
-import { decodeToken, validateToken } from '../utils/tokenUtils'; // Import token utilities for decoding and validating tokens
+// import { decodeToken, validateToken } from '../utils/tokenUtils'; // Import token utilities for decoding and validating tokens
 import { Navigate } from 'react-router-dom'; 
 // import   configureAxiosInstance  from '../utils/axiosInstance'; // Import the configureAxiosInstance function
 
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   const [roles, setRoles] = useState([]);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Effect hook to run once on component mount. This is to support scenarios where the user may have a valid token
   //  stored in localStorage from a previous session and you want to automatically authenticate them based on that
   //  token when they revisit your application
@@ -102,9 +102,10 @@ useEffect(() => {
     return !!token;
   };
 
+
 // Provide auth-related data and functions to child components through AuthContext
   return (
-    <AuthContext.Provider value={{ user, roles, token, login: handleLogin, logout: handleLogout }}>
+    <AuthContext.Provider value={{ user, roles, token, login: handleLogin, logout: handleLogout  }}>
       {!isLoading ? (
         isAuthenticated() ? (
           children // This will render children only if the user is authenticated
@@ -112,7 +113,7 @@ useEffect(() => {
           <Navigate to="/login" /> // If user is not authenticated, redirect to login page
         )
       ) : (
-        <div>Loading...</div> // Render loading state while checking authentication status
+        <div style={{backgroundColor: "red"}}>Loading...</div> // Render loading state while checking authentication status
       )}
     </AuthContext.Provider>
   );
